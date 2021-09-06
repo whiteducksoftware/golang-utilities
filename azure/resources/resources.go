@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 white duck Gesellschaft für Softwareentwicklung mbH
+Copyright (c) 2021 white duck Gesellschaft für Softwareentwicklung mbH
 
 This code is licensed under MIT license (see LICENSE for details)
 */
@@ -9,7 +9,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Azure/azure-sdk-for-go/profiles/2019-03-01/resources/mgmt/resources"
+	"github.com/Azure/azure-sdk-for-go/profiles/latest/resources/mgmt/resources"
 	"github.com/Azure/go-autorest/autorest"
 )
 
@@ -23,7 +23,8 @@ func GetDeploymentsClient(subscriptionID string, authorizer autorest.Authorizer)
 // ValidateDeployment validates the template deployments and their
 // parameters are correct and will produce a successful deployment.GetResource
 func ValidateDeployment(ctx context.Context, deployClient resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {
-	return deployClient.Validate(ctx,
+	future, err := deployClient.Validate(
+		ctx,
 		resourceGroupName,
 		deploymentName,
 		resources.Deployment{
@@ -33,12 +34,24 @@ func ValidateDeployment(ctx context.Context, deployClient resources.DeploymentsC
 				Mode:       resources.DeploymentMode(deploymentMode),
 			},
 		})
+
+	if err != nil {
+		return valid, fmt.Errorf("cannot validate deployment: %v", err)
+	}
+
+	err = future.WaitForCompletionRef(ctx, deployClient.Client)
+	if err != nil {
+		return valid, fmt.Errorf("cannot get the validate deployment future respone: %v", err)
+	}
+
+	return future.Result(deployClient)
 }
 
 // ValidateDeploymentAtSubscriptionScope validates the template deployments and their
 // parameters are correct and will produce a successful deployment.GetResource (at subscription scope)
 func ValidateDeploymentAtSubscriptionScope(ctx context.Context, deployClient resources.DeploymentsClient, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {
-	return deployClient.ValidateAtSubscriptionScope(ctx,
+	future, err := deployClient.ValidateAtSubscriptionScope(
+		ctx,
 		deploymentName,
 		resources.Deployment{
 			Properties: &resources.DeploymentProperties{
@@ -47,6 +60,17 @@ func ValidateDeploymentAtSubscriptionScope(ctx context.Context, deployClient res
 				Mode:       resources.DeploymentMode(deploymentMode),
 			},
 		})
+
+	if err != nil {
+		return valid, fmt.Errorf("cannot validate deployment: %v", err)
+	}
+
+	err = future.WaitForCompletionRef(ctx, deployClient.Client)
+	if err != nil {
+		return valid, fmt.Errorf("cannot get the validate deployment future respone: %v", err)
+	}
+
+	return future.Result(deployClient)
 }
 
 // CreateDeployment creates a template deployment using the
