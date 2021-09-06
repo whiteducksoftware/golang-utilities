@@ -28,7 +28,18 @@ type SDKAuth struct {
 	ADEndpointURL  string `json:"activeDirectoryEndpointUrl"`
 }
 
+// FromString fills the struct with the information from the parsed json string
+func (auth *SDKAuth) FromString(credentials string) error {
+	err := json.Unmarshal([]byte(credentials), &auth)
+	if err != nil {
+		return fmt.Errorf("failed to parse the credentials passed, marshal error: %s", err)
+	}
+
+	return nil
+}
+
 // GetSdkAuthFromString builds from the cmd flags a ServicePrincipal
+// Deprecated: GetSdkAuthFromString is deprecated. Use SDKAuth.FromString instead.
 func GetSdkAuthFromString(credentials string) (SDKAuth, error) {
 	var auth SDKAuth
 	err := json.Unmarshal([]byte(credentials), &auth)
@@ -69,19 +80,19 @@ func GetArmAuthorizerFromSdkAuth(auth SDKAuth) (autorest.Authorizer, error) {
 }
 
 // GetArmAuthorizerFromSdkAuthJSON creats am ARM authorizer from the passed sdk auth file
-func GetArmAuthorizerFromSdkAuthJSON(path string) (autorest.Authorizer, error) {
+func GetArmAuthorizerFromSdkAuthJSON(path string, resourceManagerEndpoint string) (autorest.Authorizer, error) {
 	var authorizer autorest.Authorizer
 
 	// Manipulate the AZURE_AUTH_LOCATION var at runtime
 	os.Setenv("AZURE_AUTH_LOCATION", path)
 	defer os.Unsetenv("AZURE_AUTH_LOCATION")
 
-	authorizer, err := auth.NewAuthorizerFromFile(azure.PublicCloud.ResourceManagerEndpoint)
+	authorizer, err := auth.NewAuthorizerFromFile(resourceManagerEndpoint)
 	return authorizer, err
 }
 
 // GetArmAuthorizerFromSdkAuthJSONString creates an ARM authorizer from the sdk auth credentials
-func GetArmAuthorizerFromSdkAuthJSONString(credentials string) (autorest.Authorizer, error) {
+func GetArmAuthorizerFromSdkAuthJSONString(credentials string, resourceManagerEndpoint string) (autorest.Authorizer, error) {
 	var authorizer autorest.Authorizer
 
 	// create a temporary file, as the sdk credentials need to be read from a file
@@ -101,7 +112,7 @@ func GetArmAuthorizerFromSdkAuthJSONString(credentials string) (autorest.Authori
 	os.Setenv("AZURE_AUTH_LOCATION", tmpFile.Name())
 	defer os.Unsetenv("AZURE_AUTH_LOCATION")
 
-	authorizer, err = auth.NewAuthorizerFromFile(azure.PublicCloud.ResourceManagerEndpoint)
+	authorizer, err = auth.NewAuthorizerFromFile(resourceManagerEndpoint)
 
 	return authorizer, err
 }
@@ -115,8 +126,8 @@ func GetArmAuthorizerFromEnvironment() (*autorest.Authorizer, error) {
 }
 
 // GetArmAuthorizerFromCLI creates an ARM authorizer from the local azure cli
-func GetArmAuthorizerFromCLI() (autorest.Authorizer, error) {
-	token, err := cli.GetTokenFromCLIWithParams(cli.GetAccessTokenParams{Resource: azure.PublicCloud.ResourceManagerEndpoint})
+func GetArmAuthorizerFromCLI(resourceManagerEndpoint string) (autorest.Authorizer, error) {
+	token, err := cli.GetTokenFromCLIWithParams(cli.GetAccessTokenParams{Resource: resourceManagerEndpoint})
 	if err != nil {
 		return nil, err
 	}
