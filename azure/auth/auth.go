@@ -30,7 +30,7 @@ type SDKAuth struct {
 
 // FromString fills the struct with the information from the parsed json string
 func (auth *SDKAuth) FromString(credentials string) error {
-	err := json.Unmarshal([]byte(credentials), &auth)
+	err := json.Unmarshal([]byte(credentials), auth)
 	if err != nil {
 		return fmt.Errorf("failed to parse the credentials passed, marshal error: %s", err)
 	}
@@ -38,20 +38,8 @@ func (auth *SDKAuth) FromString(credentials string) error {
 	return nil
 }
 
-// GetSdkAuthFromString builds from the cmd flags a ServicePrincipal
-// Deprecated: GetSdkAuthFromString is deprecated. Use SDKAuth.FromString instead.
-func GetSdkAuthFromString(credentials string) (SDKAuth, error) {
-	var auth SDKAuth
-	err := json.Unmarshal([]byte(credentials), &auth)
-	if err != nil {
-		return SDKAuth{}, fmt.Errorf("failed to parse the credentials passed, marshal error: %s", err)
-	}
-
-	return auth, nil
-}
-
-// GetArmAuthorizerFromSdkAuth creates an ARM authorizer from an Sp
-func GetArmAuthorizerFromSdkAuth(auth SDKAuth) (autorest.Authorizer, error) {
+// GetResourceManagerAuthorizer builds an autorest.Authorizer for the Azure Resource Manager using the given credentials
+func (auth SDKAuth) GetResourceManagerAuthorizer() (autorest.Authorizer, error) {
 	// If the Active Directory Endpoint is not set, fallback to the default public cloud endpoint
 	if len(auth.ADEndpointURL) == 0 {
 		auth.ADEndpointURL = azure.PublicCloud.ActiveDirectoryEndpoint
@@ -77,6 +65,19 @@ func GetArmAuthorizerFromSdkAuth(auth SDKAuth) (autorest.Authorizer, error) {
 	authorizer = autorest.NewBearerAuthorizer(token)
 
 	return authorizer, nil
+}
+
+// GetSdkAuthFromString builds from the cmd flags a ServicePrincipal
+// Deprecated: Use SDKAuth.FromString instead.
+func GetSdkAuthFromString(credentials string) (SDKAuth, error) {
+	var sdkAuth SDKAuth
+	return sdkAuth, sdkAuth.FromString(credentials)
+}
+
+// GetArmAuthorizerFromSdkAuth creates an ARM authorizer from an Sp
+// Deprecated: Use SDKAuth.GetResourceManagerAuthorizer instead.
+func GetArmAuthorizerFromSdkAuth(auth SDKAuth) (autorest.Authorizer, error) {
+	return auth.GetResourceManagerAuthorizer()
 }
 
 // GetArmAuthorizerFromSdkAuthJSON creats am ARM authorizer from the passed sdk auth file
