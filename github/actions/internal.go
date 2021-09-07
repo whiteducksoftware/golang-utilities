@@ -25,5 +25,5 @@ func (message Message) print(prefix string)  {
 	if len(message.Col) > 0 {
 		output += fmt.Sprintf("col=%s,", message.File)
 	}
-	fmt.Printf(fmt.Sprintf("%s::%s", strings.TrimSuffix(output, ","), message.Message))
+	fmt.Printf(fmt.Sprintf("%s::%s\n", strings.TrimSuffix(output, ","), message.Message))
 }

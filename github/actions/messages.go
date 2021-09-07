@@ -24,7 +24,7 @@ func SetOutput(name string, value string) {
 
 // WriteDebug is used to write debug message to the github actions log
 func WriteDebug(message string) {
-	fmt.Printf("::debug::%s", message)
+	fmt.Printf("::debug::%s\n", message)
 }
 
 // WriteWarning is used to write warning message to the github actions log
