@@ -8,6 +8,9 @@ package deployments
 // GetClient takes the azure authorizer and creates an ARM deployments client on the desired subscription
 func GetClient(subscriptionID string, authorizer autorest.Authorizer) resources.DeploymentsClient {}
 
+// GetClientWithBaseUri takes the azure authorizer and creates an ARM deployments client on the desired subscription
+func GetClientWithBaseUri(baseUri string, subscriptionID string, authorizer autorest.Authorizer) resources.DeploymentsClient {}
+
 // Validate validates the template deployments and their parameters are correct and will produce a successful deployment.GetResource
 func Validate(ctx context.Context, client resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (resources.DeploymentValidateResult, error) {}
 

@@ -13,3 +13,11 @@ func GetClient(subscriptionID string, authorizer autorest.Authorizer) resources.
 
 	return deployClient
 }
+
+// GetClientWithBaseUri takes the azure authorizer and creates an ARM deployments client on the desired subscription
+func GetClientWithBaseUri(baseUri string, subscriptionID string, authorizer autorest.Authorizer) resources.DeploymentsClient {
+	deployClient := resources.NewDeploymentsClientWithBaseURI(baseUri, subscriptionID)
+	deployClient.Authorizer = authorizer
+
+	return deployClient
+}
