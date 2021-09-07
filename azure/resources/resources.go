@@ -41,7 +41,7 @@ func ValidateDeployment(ctx context.Context, deployClient resources.DeploymentsC
 
 	err = future.WaitForCompletionRef(ctx, deployClient.Client)
 	if err != nil {
-		return valid, fmt.Errorf("cannot get the validate deployment future respone: %v", err)
+		return valid, fmt.Errorf("cannot get the validate deployment future response: %v", err)
 	}
 
 	return future.Result(deployClient)
@@ -67,7 +67,7 @@ func ValidateDeploymentAtSubscriptionScope(ctx context.Context, deployClient res
 
 	err = future.WaitForCompletionRef(ctx, deployClient.Client)
 	if err != nil {
-		return valid, fmt.Errorf("cannot get the validate deployment future respone: %v", err)
+		return valid, fmt.Errorf("cannot get the validate deployment future response: %v", err)
 	}
 
 	return future.Result(deployClient)
@@ -94,7 +94,7 @@ func CreateDeployment(ctx context.Context, deployClient resources.DeploymentsCli
 
 	err = future.WaitForCompletionRef(ctx, deployClient.Client)
 	if err != nil {
-		return de, fmt.Errorf("cannot get the create deployment future respone: %v", err)
+		return de, fmt.Errorf("cannot get the create deployment future response: %v", err)
 	}
 
 	return future.Result(deployClient)
@@ -121,7 +121,7 @@ func CreateDeploymentAtSubscriptionScope(ctx context.Context, deployClient resou
 
 	err = future.WaitForCompletionRef(ctx, deployClient.Client)
 	if err != nil {
-		return de, fmt.Errorf("cannot get the create deployment future respone: %v", err)
+		return de, fmt.Errorf("cannot get the create deployment future response: %v", err)
 	}
 
 	return future.Result(deployClient)

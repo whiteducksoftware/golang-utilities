@@ -26,7 +26,7 @@ type GitHub struct {
 // Load parses the environment vars and reads github options
 func (g *GitHub) Load() error {
 	if err := env.Parse(g); err != nil {
-		return fmt.Errorf("failed to parse github envrionments: %s", err)
+		return fmt.Errorf("failed to parse github environments: %s", err)
 	}
 
 	return nil
