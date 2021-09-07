@@ -35,7 +35,7 @@ func (auth *SDKAuth) FromString(credentials string) error {
 }
 
 // GetResourceManagerAuthorizer builds an autorest.Authorizer for the Azure Resource Manager using the given credentials
-func (auth SDKAuth) GetResourceManagerAuthorizer() (autorest.Authorizer, error) {
+func (auth *SDKAuth) GetResourceManagerAuthorizer() (autorest.Authorizer, error) {
 	// If the Active Directory Endpoint is not set, fallback to the default public cloud endpoint
 	if len(auth.ADEndpointURL) == 0 {
 		auth.ADEndpointURL = azure.PublicCloud.ActiveDirectoryEndpoint

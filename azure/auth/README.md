@@ -12,7 +12,7 @@ type SDKAuth struct {}
 func (auth *SDKAuth) FromString(credentials string) error {}
 
 // GetResourceManagerAuthorizer builds an autorest.Authorizer for the Azure Resource Manager using the given credentials
-func (auth SDKAuth) GetResourceManagerAuthorizer() (autorest.Authorizer, error) {}
+func (auth *SDKAuth) GetResourceManagerAuthorizer() (autorest.Authorizer, error) {}
 
 // GetSdkAuthFromString builds from the cmd flags a ServicePrincipal
 // Deprecated: Use SDKAuth.FromString instead.
