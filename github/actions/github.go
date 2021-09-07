@@ -5,7 +5,11 @@ This code is licensed under MIT license (see LICENSE for details)
 */
 package actions
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/caarlos0/env"
+)
 
 // GitHub represents the inputs which github provides us on default
 type GitHub struct {
@@ -18,6 +22,26 @@ type GitHub struct {
 	EventPath       string `env:"GITHUB_EVENT_PATH"`
 	Ref             string `env:"GITHUB_REF"`
 	RunningAsAction bool   `env:"GITHUB_ACTIONS" envDefault:"false"`
+}
+
+// Load parses the environment vars and reads github options
+func (g *GitHub) Load() error {
+	if err := env.Parse(g); err != nil {
+		return fmt.Errorf("failed to parse github envrionments: %s", err)
+	}
+
+	return nil
+}
+
+// LoadOptions parses the environment vars and reads github options
+// Deprecated: Use GitHub.Load instead.
+func LoadOptions() (GitHub, error) {
+	github := GitHub{}
+	if err := github.Load(); err != nil {
+		return GitHub{}, err
+	}
+
+	return github, nil
 }
 
 // SetOutput can be used to set outputs of your action
