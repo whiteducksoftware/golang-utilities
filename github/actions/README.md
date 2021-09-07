@@ -3,7 +3,7 @@ Installation: `go get github.com/whiteducksoftware/golang-utilities/github/actio
 
 ## Types & Functions
 ```go
-package github
+package actions
 
 // Types
 type GitHub struct {}   // represents the inputs which github provides us on default
