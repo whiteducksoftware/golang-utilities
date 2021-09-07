@@ -18,7 +18,7 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure/cli"
 )
 
-// SDKAuth represents Azure Sp
+// SDKAuth represents an Azure AD Service Principal
 type SDKAuth struct {
 	ClientID       string `json:"clientId"`
 	ClientSecret   string `json:"clientSecret"`
@@ -28,7 +28,7 @@ type SDKAuth struct {
 	ADEndpointURL  string `json:"activeDirectoryEndpointUrl"`
 }
 
-// FromString fills the struct with the information from the parsed json string
+// FromString fills the struct with the information from the input json string
 func (auth *SDKAuth) FromString(credentials string) error {
 	err := json.Unmarshal([]byte(credentials), auth)
 	if err != nil {
@@ -122,17 +122,17 @@ func GetArmAuthorizerFromSdkAuthJSONString(credentials string, resourceManagerEn
 	return authorizer, err
 }
 
-// GetArmAuthorizerFromEnvironment creates an ARM authorizer from a MSI (AAD Pod Identity)
-func GetArmAuthorizerFromEnvironment() (*autorest.Authorizer, error) {
+// GetArmAuthorizerFromEnvironment creates an ARM authorizer from a MSI (e.g. AAD Pod Identity)
+func GetArmAuthorizerFromEnvironment() (autorest.Authorizer, error) {
 	var authorizer autorest.Authorizer
 	authorizer, err := auth.NewAuthorizerFromEnvironment()
 
-	return &authorizer, err
+	return authorizer, err
 }
 
 // GetArmAuthorizerFromCLI creates an ARM authorizer from the local azure cli
-func GetArmAuthorizerFromCLI(resourceManagerEndpoint string) (autorest.Authorizer, error) {
-	token, err := cli.GetTokenFromCLIWithParams(cli.GetAccessTokenParams{Resource: resourceManagerEndpoint})
+func GetArmAuthorizerFromCLI(params cli.GetAccessTokenParams) (autorest.Authorizer, error) {
+	token, err := cli.GetTokenFromCLIWithParams(params)
 	if err != nil {
 		return nil, err
 	}
