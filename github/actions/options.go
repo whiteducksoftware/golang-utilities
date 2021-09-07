@@ -10,7 +10,7 @@ import (
 // GitHub represents the inputs which github provides us on default
 type GitHub struct {
 	Workflow           string `env:"GITHUB_WORKFLOW"`
-	RunID              uint16 `env:"GITHUB_RUN_ID"`
+	RunID              uint64 `env:"GITHUB_RUN_ID"`
 	JobID              string `env:"GITHUB_JOB"`
 	Action             string `env:"GITHUB_ACTION"`
 	Actor              string `env:"GITHUB_ACTOR"`
