@@ -9,7 +9,7 @@ import (
 
 // Create creates a template deployment using the
 // referenced JSON files for the template and its parameters
-func Create(ctx context.Context, client resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (de resources.DeploymentExtended, err error) {
+func Create(ctx context.Context, client resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (resources.DeploymentExtended, error) {
 	future, err := client.CreateOrUpdate(
 		ctx,
 		resourceGroupName,
@@ -23,12 +23,12 @@ func Create(ctx context.Context, client resources.DeploymentsClient, resourceGro
 		},
 	)
 	if err != nil {
-		return de, fmt.Errorf("cannot create deployment: %v", err)
+		return resources.DeploymentExtended{}, fmt.Errorf("cannot create deployment: %v", err)
 	}
 
 	err = future.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
-		return de, fmt.Errorf("cannot get the create deployment future response: %v", err)
+		return resources.DeploymentExtended{}, fmt.Errorf("cannot get the create deployment future response: %v", err)
 	}
 
 	return future.Result(client)
@@ -36,7 +36,7 @@ func Create(ctx context.Context, client resources.DeploymentsClient, resourceGro
 
 // CreateAtSubscriptionScope creates a template deployment using the
 // referenced JSON files for the template and its parameters (at subscription scope)
-func CreateAtSubscriptionScope(ctx context.Context, client resources.DeploymentsClient, deploymentName, deploymentMode string, template, params map[string]interface{}) (de resources.DeploymentExtended, err error) {
+func CreateAtSubscriptionScope(ctx context.Context, client resources.DeploymentsClient, deploymentName, deploymentMode string, template, params map[string]interface{}) (resources.DeploymentExtended, error) {
 	future, err := client.CreateOrUpdateAtSubscriptionScope(
 		ctx,
 		deploymentName,
@@ -50,12 +50,12 @@ func CreateAtSubscriptionScope(ctx context.Context, client resources.Deployments
 	)
 
 	if err != nil {
-		return de, fmt.Errorf("cannot create deployment: %v", err)
+		return resources.DeploymentExtended{}, fmt.Errorf("cannot create deployment: %v", err)
 	}
 
 	err = future.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
-		return de, fmt.Errorf("cannot get the create deployment future response: %v", err)
+		return resources.DeploymentExtended{}, fmt.Errorf("cannot get the create deployment future response: %v", err)
 	}
 
 	return future.Result(client)
@@ -63,7 +63,7 @@ func CreateAtSubscriptionScope(ctx context.Context, client resources.Deployments
 
 // CreateAtManagementGroupScope creates a template deployment using the
 // referenced JSON files for the template and its parameters (at management group scope)
-func CreateAtManagementGroupScope(ctx context.Context, client resources.DeploymentsClient, managementGroupId string, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentExtended, err error) {
+func CreateAtManagementGroupScope(ctx context.Context, client resources.DeploymentsClient, managementGroupId string, deploymentName string, deploymentMode string, template, params map[string]interface{}) (resources.DeploymentExtended, error) {
 	future, err := client.CreateOrUpdateAtManagementGroupScope(
 		ctx,
 		managementGroupId,
@@ -77,12 +77,12 @@ func CreateAtManagementGroupScope(ctx context.Context, client resources.Deployme
 		})
 
 	if err != nil {
-		return valid, fmt.Errorf("cannot validate deployment: %v", err)
+		return resources.DeploymentExtended{}, fmt.Errorf("cannot validate deployment: %v", err)
 	}
 
 	err = future.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
-		return valid, fmt.Errorf("cannot get the validate deployment future response: %v", err)
+		return resources.DeploymentExtended{}, fmt.Errorf("cannot get the validate deployment future response: %v", err)
 	}
 
 	return future.Result(client)

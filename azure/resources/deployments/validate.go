@@ -9,7 +9,7 @@ import (
 
 // Validate validates the template deployments and their
 // parameters are correct and will produce a successful deployment.GetResource
-func Validate(ctx context.Context, client resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {
+func Validate(ctx context.Context, client resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (resources.DeploymentValidateResult, error) {
 	future, err := client.Validate(
 		ctx,
 		resourceGroupName,
@@ -23,12 +23,12 @@ func Validate(ctx context.Context, client resources.DeploymentsClient, resourceG
 		})
 
 	if err != nil {
-		return valid, fmt.Errorf("cannot validate deployment: %v", err)
+		return resources.DeploymentValidateResult{}, fmt.Errorf("cannot validate deployment: %v", err)
 	}
 
 	err = future.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
-		return valid, fmt.Errorf("cannot get the validate deployment future response: %v", err)
+		return resources.DeploymentValidateResult{}, fmt.Errorf("cannot get the validate deployment future response: %v", err)
 	}
 
 	return future.Result(client)
@@ -36,7 +36,7 @@ func Validate(ctx context.Context, client resources.DeploymentsClient, resourceG
 
 // ValidateAtSubscriptionScope validates the template deployments and their
 // parameters are correct and will produce a successful deployment.GetResource (at subscription scope)
-func ValidateAtSubscriptionScope(ctx context.Context, client resources.DeploymentsClient, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {
+func ValidateAtSubscriptionScope(ctx context.Context, client resources.DeploymentsClient, deploymentName string, deploymentMode string, template, params map[string]interface{}) (resources.DeploymentValidateResult, error) {
 	future, err := client.ValidateAtSubscriptionScope(
 		ctx,
 		deploymentName,
@@ -49,12 +49,12 @@ func ValidateAtSubscriptionScope(ctx context.Context, client resources.Deploymen
 		})
 
 	if err != nil {
-		return valid, fmt.Errorf("cannot validate deployment: %v", err)
+		return resources.DeploymentValidateResult{}, fmt.Errorf("cannot validate deployment: %v", err)
 	}
 
 	err = future.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
-		return valid, fmt.Errorf("cannot get the validate deployment future response: %v", err)
+		return resources.DeploymentValidateResult{}, fmt.Errorf("cannot get the validate deployment future response: %v", err)
 	}
 
 	return future.Result(client)
@@ -62,7 +62,7 @@ func ValidateAtSubscriptionScope(ctx context.Context, client resources.Deploymen
 
 // ValidateAtManagementGroupScope validates the template deployments and their
 // parameters are correct and will produce a successful deployment.GetResource (at management group scope)
-func ValidateAtManagementGroupScope(ctx context.Context, client resources.DeploymentsClient, managementGroupId string, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {
+func ValidateAtManagementGroupScope(ctx context.Context, client resources.DeploymentsClient, managementGroupId string, deploymentName string, deploymentMode string, template, params map[string]interface{}) (resources.DeploymentValidateResult, error) {
 	future, err := client.ValidateAtManagementGroupScope(
 		ctx,
 		managementGroupId,
@@ -76,12 +76,12 @@ func ValidateAtManagementGroupScope(ctx context.Context, client resources.Deploy
 		})
 
 	if err != nil {
-		return valid, fmt.Errorf("cannot validate deployment: %v", err)
+		return resources.DeploymentValidateResult{}, fmt.Errorf("cannot validate deployment: %v", err)
 	}
 
 	err = future.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
-		return valid, fmt.Errorf("cannot get the validate deployment future response: %v", err)
+		return resources.DeploymentValidateResult{}, fmt.Errorf("cannot get the validate deployment future response: %v", err)
 	}
 
 	return future.Result(client)
