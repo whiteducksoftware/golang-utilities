@@ -1,9 +1,3 @@
-/*
-Copyright (c) 2021 white duck Gesellschaft für Softwareentwicklung mbH
-
-This code is licensed under MIT license (see LICENSE for details)
-*/
-
 // Package resources contains utilities for azure sdk resource handling
 package resources
 
