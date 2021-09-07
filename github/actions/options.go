@@ -7,7 +7,6 @@ package actions
 
 import (
 	"fmt"
-
 	"github.com/caarlos0/env"
 )
 
@@ -42,9 +41,4 @@ func LoadOptions() (GitHub, error) {
 	}
 
 	return github, nil
-}
-
-// SetOutput can be used to set outputs of your action
-func SetOutput(name string, value string) {
-	fmt.Printf("::set-output name=%s::%s\n", name, value)
 }

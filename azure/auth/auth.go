@@ -71,7 +71,11 @@ func (auth SDKAuth) GetResourceManagerAuthorizer() (autorest.Authorizer, error) 
 // Deprecated: Use SDKAuth.FromString instead.
 func GetSdkAuthFromString(credentials string) (SDKAuth, error) {
 	var sdkAuth SDKAuth
-	return sdkAuth, sdkAuth.FromString(credentials)
+	if err := sdkAuth.FromString(credentials); err != nil {
+		return SDKAuth{}, err
+	}
+
+	return sdkAuth, nil
 }
 
 // GetArmAuthorizerFromSdkAuth creates an ARM authorizer from an Sp
