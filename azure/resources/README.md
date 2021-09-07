@@ -9,14 +9,20 @@ package resources
 func GetDeploymentsClient(subscriptionID string, authorizer autorest.Authorizer) resources.DeploymentsClient {}
 
 // ValidateDeployment validates the template deployments and their parameters are correct and will produce a successful deployment.GetResource
-func ValidateDeployment(ctx context.Context, deployClient resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {}
+func ValidateDeployment(ctx context.Context, client resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {}
 
 // ValidateDeploymentAtSubscriptionScope validates the template deployments and their parameters are correct and will produce a successful deployment.GetResource (at subscription scope)
-func ValidateDeploymentAtSubscriptionScope(ctx context.Context, deployClient resources.DeploymentsClient, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {}
+func ValidateDeploymentAtSubscriptionScope(ctx context.Context, client resources.DeploymentsClient, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {}
+
+// ValidateDeploymentAtManagementGroupScope validates the template deployments and their parameters are correct and will produce a successful deployment.GetResource (at management group scope)
+func ValidateDeploymentAtManagementGroupScope(ctx context.Context, client resources.DeploymentsClient, managementGroupId string, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentValidateResult, err error) {}
 
 // CreateDeployment creates a template deployment using the referenced JSON files for the template and its parameters
-func CreateDeployment(ctx context.Context, deployClient resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (de resources.DeploymentExtended, err error) {}
+func CreateDeployment(ctx context.Context, client resources.DeploymentsClient, resourceGroupName, deploymentName string, deploymentMode string, template, params map[string]interface{}) (de resources.DeploymentExtended, err error) {}
 
 // CreateDeploymentAtSubscriptionScope creates a template deployment using the referenced JSON files for the template and its parameters (at subscription scope)
-func CreateDeploymentAtSubscriptionScope(ctx context.Context, deployClient resources.DeploymentsClient, deploymentName, deploymentMode string, template, params map[string]interface{}) (de resources.DeploymentExtended, err error) {}
+func CreateDeploymentAtSubscriptionScope(ctx context.Context, client resources.DeploymentsClient, deploymentName, deploymentMode string, template, params map[string]interface{}) (de resources.DeploymentExtended, err error) {}
+
+// CreateDeploymentAtManagementGroupScope creates a template deployment using the referenced JSON files for the template and its parameters (at management group scope)
+func CreateDeploymentAtManagementGroupScope(ctx context.Context, client resources.DeploymentsClient, managementGroupId string, deploymentName string, deploymentMode string, template, params map[string]interface{}) (valid resources.DeploymentExtended, err error) {}
 ```
