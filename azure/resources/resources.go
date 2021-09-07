@@ -126,4 +126,3 @@ func CreateDeploymentAtSubscriptionScope(ctx context.Context, deployClient resou
 
 	return future.Result(deployClient)
 }
-

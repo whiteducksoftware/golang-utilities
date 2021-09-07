@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func (message Message) print(prefix string)  {
+func (message Message) print(prefix string) {
 	output := prefix
 	if !strings.HasSuffix(output, " ") {
 		output += " "
