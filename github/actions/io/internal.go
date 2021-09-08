@@ -1,5 +1,5 @@
-// Package actions contains utilities for working with github actions
-package actions
+// Package io contains io utilities for working with github actions
+package io
 
 import (
 	"fmt"
