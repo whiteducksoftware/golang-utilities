@@ -16,10 +16,10 @@ func (message Message) print(prefix string) {
 		output += fmt.Sprintf("file=%s,", message.File)
 	}
 	if len(message.Line) > 0 {
-		output += fmt.Sprintf("line=%s,", message.File)
+		output += fmt.Sprintf("line=%s,", message.Line)
 	}
 	if len(message.Col) > 0 {
-		output += fmt.Sprintf("col=%s,", message.File)
+		output += fmt.Sprintf("col=%s,", message.Col)
 	}
 	fmt.Printf(fmt.Sprintf("%s::%s\n", strings.TrimSuffix(output, ","), message.Message))
 }
