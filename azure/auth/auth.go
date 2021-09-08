@@ -3,6 +3,7 @@ package auth
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -26,6 +27,11 @@ type SDKAuth struct {
 
 // FromString fills the struct with the information from the input json string
 func (auth *SDKAuth) FromString(credentials string) error {
+	// Check for an nil pointer
+	if auth == nil {
+		return errors.New("nil pointer must not be provided")
+	}
+
 	err := json.Unmarshal([]byte(credentials), auth)
 	if err != nil {
 		return fmt.Errorf("failed to parse the credentials passed, marshal error: %s", err)
@@ -36,6 +42,11 @@ func (auth *SDKAuth) FromString(credentials string) error {
 
 // GetResourceManagerAuthorizer builds an autorest.Authorizer for the Azure Resource Manager using the given credentials
 func (auth *SDKAuth) GetResourceManagerAuthorizer() (autorest.Authorizer, error) {
+	// Check for an nil pointer
+	if auth == nil {
+		return nil, errors.New("nil pointer must not be provided")
+	}
+
 	// If the Active Directory Endpoint is not set, fallback to the default public cloud endpoint
 	if len(auth.ADEndpointURL) == 0 {
 		auth.ADEndpointURL = azure.PublicCloud.ActiveDirectoryEndpoint

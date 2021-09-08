@@ -2,6 +2,7 @@
 package actions
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/caarlos0/env/v6"
@@ -25,8 +26,13 @@ type GitHub struct {
 }
 
 // Load parses the environment vars and reads github options
-func (g *GitHub) Load() error {
-	if err := env.Parse(g); err != nil {
+func (github *GitHub) Load() error {
+	// Check for an nil pointer
+	if github == nil {
+		return errors.New("nil pointer must not be provided")
+	}
+
+	if err := env.Parse(github); err != nil {
 		return fmt.Errorf("failed to parse github environments: %s", err)
 	}
 
